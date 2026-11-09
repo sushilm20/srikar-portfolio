@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Blueprint } from '@/components/Blueprint'
@@ -29,7 +29,8 @@ export function Hero({ reduced }) {
   const ref = useRef(null)
   const scrollTo = useScrollTo()
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const p = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
+  // Lenis already smooths the wheel; scroll-linked values follow it 1:1.
+  const p = scrollYProgress
 
   const still = (v) => (reduced ? v[0] : v)
   const nameScale = useTransform(p, [0, 0.7], still([1, 0.86]))
@@ -47,15 +48,15 @@ export function Hero({ reduced }) {
 
         {/* Parallax blueprint */}
         <motion.div
-          className="pointer-events-none absolute top-[14%] right-[-18%] w-[95vw] max-w-[640px] text-heading/80 sm:right-[-6%] md:top-[12%] md:right-[2%] md:w-[52vw]"
+          className="pointer-events-none absolute top-[9%] left-1/2 w-[78vw] max-w-[640px] -translate-x-1/2 text-heading/70 md:top-[12%] md:right-[2%] md:left-auto md:w-[52vw] md:translate-x-0 md:text-heading/80"
           style={{ y: bpY, scale: bpScale, opacity: bpOpacity }}
         >
           <Blueprint progress={p} reduced={reduced} />
         </motion.div>
 
-        <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-4 pt-32 pb-14 md:px-8 md:pb-20">
+        <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-4 pt-[62vw] pb-16 md:px-8 md:pt-32 md:pb-24">
           <motion.p
-            className="eyebrow mb-6 md:mb-8"
+            className="eyebrow mb-6 tracking-[0.12em] md:mb-8 md:tracking-[0.18em]"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.8, ease }}
@@ -117,6 +118,23 @@ export function Hero({ reduced }) {
             </motion.div>
           </motion.div>
         </div>
+
+        {!reduced && (
+          <motion.div
+            aria-hidden="true"
+            className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
+            style={{ opacity: fadeOut }}
+          >
+            <span className="font-mono text-[0.65rem] tracking-[0.25em] text-body uppercase">Scroll</span>
+            <span className="relative h-10 w-px overflow-hidden bg-white/10">
+              <motion.span
+                className="absolute inset-x-0 top-0 h-1/2 bg-blue"
+                animate={{ y: ['-100%', '200%'] }}
+                transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </span>
+          </motion.div>
+        )}
       </div>
     </section>
   )

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useLenis } from 'lenis/react'
-import { motion, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import { Maximize2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -20,9 +20,11 @@ function Shot({ image, onOpen, className = '', label, priority }) {
       <img
         src={image.src}
         alt={image.alt}
+        width={image.w}
+        height={image.h}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
-        className="h-full w-full object-contain p-2 md:p-3 transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+        className="h-auto w-full object-contain p-2 md:h-full md:p-3 transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
       />
       <span className="glass absolute right-3 bottom-3 flex size-9 items-center justify-center rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
         <Maximize2 className="size-4 text-heading" aria-hidden="true" />
@@ -43,7 +45,7 @@ function ProjectPanel({ project, onOpen, className = '' }) {
         image={project.images[0]}
         label={project.images[0].alt}
         onOpen={() => onOpen(project, 0)}
-        className="aspect-[4/3] md:col-span-8 md:row-span-6 md:aspect-auto"
+        className="md:col-span-8 md:row-span-6"
       />
       <div className="tile flex flex-col p-6 md:col-span-4 md:row-span-4 md:p-7">
         <p className="font-mono text-[clamp(3rem,6vw,5rem)] leading-none font-medium tracking-[-0.06em] text-blue">{project.n}</p>
@@ -71,7 +73,7 @@ function ProjectPanel({ project, onOpen, className = '' }) {
         image={project.images[1]}
         label={project.images[1].alt}
         onOpen={() => onOpen(project, 1)}
-        className="aspect-[16/9] md:col-span-4 md:row-span-2 md:aspect-auto"
+        className="md:col-span-4 md:row-span-2"
       />
     </article>
   )
@@ -112,7 +114,7 @@ function PinnedTrack({ onOpen }) {
   }, [])
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] })
-  const smooth = useSpring(scrollYProgress, { stiffness: 140, damping: 32, mass: 0.35 })
+  const smooth = scrollYProgress // Lenis does the smoothing; no second spring.
   const x = useTransform(smooth, [0, 1], [0, -distance])
   const bar = useTransform(smooth, [0, 1], [0, 1])
 

@@ -68,8 +68,8 @@ export const projects = [
     tags: ['Python', 'Design'],
     body: 'A Python project that evaluates selected aspects of an interior design.',
     images: [
-      { src: img('interior-design.png'), alt: 'Sliding wardrobe drawings: external and internal elevations with dimensions' },
-      { src: img('interior-design-2.png'), alt: 'Python code that reads measurements from the design drawing PDF' },
+      { src: img('interior-design.png'), w: 1342, h: 470, alt: 'Sliding wardrobe drawings: external and internal elevations with dimensions' },
+      { src: img('interior-design-2.png'), w: 640, h: 683, alt: 'Python code that reads measurements from the design drawing PDF' },
     ],
   },
   {
@@ -79,8 +79,8 @@ export const projects = [
     tags: ['Programming', 'Weather API'],
     body: 'A program that captures weather data from selected cities using a weather API.',
     images: [
-      { src: img('weather-logger.png'), alt: 'Terminal output: saved weather report for Newark, US with temperature, humidity and conditions' },
-      { src: img('weather-logger-2.png'), alt: 'Python code that requests weather data from the OpenWeather API' },
+      { src: img('weather-logger.png'), w: 832, h: 404, alt: 'Terminal output: saved weather report for Newark, US with temperature, humidity and conditions' },
+      { src: img('weather-logger-2.png'), w: 1366, h: 1444, alt: 'Python code that requests weather data from the OpenWeather API' },
     ],
   },
   {
@@ -90,8 +90,8 @@ export const projects = [
     tags: ['Programming', 'Currency API'],
     body: 'A project that uses an API to retrieve exchange rates and equivalent amounts in different currencies.',
     images: [
-      { src: img('exchange-rate-2.png'), alt: 'Terminal output: USD to EUR exchange rate retrieved and saved to a database' },
-      { src: img('exchange-rate.png'), alt: 'Python code that retrieves exchange rates from an API' },
+      { src: img('exchange-rate-2.png'), w: 1136, h: 302, alt: 'Terminal output: USD to EUR exchange rate retrieved and saved to a database' },
+      { src: img('exchange-rate.png'), w: 1632, h: 1570, alt: 'Python code that retrieves exchange rates from an API' },
     ],
   },
 ]

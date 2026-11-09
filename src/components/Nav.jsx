@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion'
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useLenis } from 'lenis/react'
 import { Menu, ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -26,7 +26,7 @@ export function useScrollTo() {
 
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, { stiffness: 160, damping: 30, mass: 0.3 })
+  const scaleX = scrollYProgress
   return (
     <motion.div
       aria-hidden="true"
@@ -139,7 +139,7 @@ export function Nav() {
               <Menu className="size-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="glass w-full border-l-0 px-6 pt-20 sm:max-w-sm" data-lenis-prevent>
+          <SheetContent side="right" className="w-full border-l-0 bg-[#0e1117]/95 px-6 pt-20 backdrop-blur-xl sm:max-w-sm" data-lenis-prevent>
             <SheetTitle className="sr-only">Menu</SheetTitle>
             <SheetDescription className="sr-only">Jump to a section of the page</SheetDescription>
             <ul className="flex flex-col gap-1">
