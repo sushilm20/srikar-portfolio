@@ -4,8 +4,10 @@ import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Blueprint } from '@/components/Blueprint'
 import { useScrollTo } from '@/components/Nav'
+import { CornerMarks, Crosshair, GridGlow } from '@/components/HeroFX'
 import { person } from '@/content'
 import { ease } from '@/lib/motion'
+import { useFinePointer, useLocalPointer } from '@/lib/pointer'
 
 function SplitWord({ word, delay }) {
   return (
@@ -27,7 +29,11 @@ function SplitWord({ word, delay }) {
 
 export function Hero({ reduced }) {
   const ref = useRef(null)
+  const stageRef = useRef(null)
   const scrollTo = useScrollTo()
+  const fine = useFinePointer()
+  const interactive = fine && !reduced
+  const pointer = useLocalPointer(stageRef, { enabled: interactive })
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   // Lenis already smooths the wheel; scroll-linked values follow it 1:1.
   const p = scrollYProgress
@@ -41,18 +47,30 @@ export function Hero({ reduced }) {
   const bpScale = useTransform(p, [0, 1], still([1, 1.25]))
   const bpOpacity = useTransform(p, [0, 0.85], reduced ? [1, 1] : [1, 0.15])
 
+  // The drawing leans toward the cursor and drifts against it (depth parallax).
+  const tiltY = useTransform(pointer.nx, [-0.5, 0.5], interactive ? [-14, 14] : [0, 0])
+  const tiltX = useTransform(pointer.ny, [-0.5, 0.5], interactive ? [10, -10] : [0, 0])
+  const driftX = useTransform(pointer.nx, [-0.5, 0.5], interactive ? [24, -24] : [0, 0])
+  const driftY = useTransform(pointer.ny, [-0.5, 0.5], interactive ? [18, -18] : [0, 0])
+
   return (
     <section id="top" ref={ref} aria-label="Introduction" className={reduced ? 'relative' : 'relative h-[170svh]'}>
-      <div className="sticky top-0 flex min-h-svh flex-col overflow-hidden">
+      <div ref={stageRef} className="sticky top-0 flex min-h-svh flex-col overflow-hidden">
         <div className="blueprint-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+        {interactive && <GridGlow pointer={pointer} />}
+        <CornerMarks />
 
         {/* Parallax blueprint */}
         <motion.div
           className="pointer-events-none absolute top-[9%] left-1/2 w-[78vw] max-w-[640px] -translate-x-1/2 text-heading/70 md:top-[12%] md:right-[2%] md:left-auto md:w-[52vw] md:translate-x-0 md:text-heading/80"
           style={{ y: bpY, scale: bpScale, opacity: bpOpacity }}
         >
-          <Blueprint progress={p} reduced={reduced} />
+          <motion.div style={{ rotateX: tiltX, rotateY: tiltY, x: driftX, y: driftY, transformPerspective: 1100 }}>
+            <Blueprint progress={p} reduced={reduced} />
+          </motion.div>
         </motion.div>
+
+        {interactive && <Crosshair pointer={pointer} />}
 
         <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-4 pt-[62vw] pb-16 md:px-8 md:pt-32 md:pb-24">
           <motion.p

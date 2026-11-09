@@ -2,6 +2,7 @@ import { MotionConfig } from 'framer-motion'
 import { ReactLenis } from 'lenis/react'
 import { Nav, ScrollProgress, useScrollTo } from '@/components/Nav'
 import { PixelMark } from '@/components/PixelMark'
+import { SideRails } from '@/components/SideRails'
 import { Hero } from '@/sections/Hero'
 import { Statement } from '@/sections/Statement'
 import { About } from '@/sections/About'
@@ -10,6 +11,7 @@ import { Skills } from '@/sections/Skills'
 import { Contact } from '@/sections/Contact'
 import { nav, person } from '@/content'
 import { useReducedMotionPref } from '@/lib/motion'
+import { useFinePointer, useTileSpotlight } from '@/lib/pointer'
 
 function Footer() {
   const scrollTo = useScrollTo()
@@ -39,10 +41,13 @@ function Footer() {
 }
 
 function Site({ reduced }) {
+  const fine = useFinePointer()
+  useTileSpotlight(fine)
   return (
     <>
       <a href="#main" className="skip-link">Skip to content</a>
       <ScrollProgress />
+      <SideRails interactive={fine && !reduced} />
       <Nav />
       <main id="main" tabIndex={-1} className="outline-none">
         <Hero reduced={reduced} />

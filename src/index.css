@@ -152,3 +152,54 @@ html.lenis, html.lenis body { height: auto; }
     scroll-behavior: auto !important;
   }
 }
+
+/* Accent grid revealed around the cursor (masked in JS) */
+.grid-lines-accent {
+  background-image:
+    linear-gradient(rgba(145, 180, 255, 0.42) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(145, 180, 255, 0.42) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Tile spotlight: a faint glow and a lit border that follow the cursor */
+.tile {
+  position: relative;
+  isolation: isolate;
+}
+.tile::before,
+.tile::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.tile::before {
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(420px circle at var(--x, 50%) var(--y, 50%), rgba(145, 180, 255, 0.075), transparent 45%);
+}
+.tile::after {
+  inset: -1px;
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--x, 50%) var(--y, 50%), rgba(145, 180, 255, 0.55), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover::before,
+  .tile:hover::after { opacity: 1; }
+}
+
+/* Side rulers */
+.ruler {
+  background-image:
+    linear-gradient(to bottom, rgba(170, 181, 199, 0.28) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(170, 181, 199, 0.12) 1px, transparent 1px);
+  background-size: 14px 64px, 7px 8px;
+  background-repeat: repeat-y;
+}
+.ruler-left { background-position: right 0 top var(--ruler-y, 0px), right 0 top var(--ruler-y, 0px); }
+.ruler-right { background-position: left 0 top var(--ruler-y, 0px), left 0 top var(--ruler-y, 0px); }

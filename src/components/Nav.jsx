@@ -36,7 +36,7 @@ export function ScrollProgress() {
   )
 }
 
-function useActiveSection() {
+export function useActiveSection() {
   const [active, setActive] = useState('')
   useEffect(() => {
     const els = nav.map((n) => document.getElementById(n.id)).filter(Boolean)
