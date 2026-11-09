@@ -46,11 +46,15 @@ function ContactForm() {
     const data = Object.fromEntries(new FormData(form))
     if (data._honey) return // bot
     setStatus('sending')
+    // Never leave the visitor on "Sending…": give up after 15s and offer the fallback.
+    const ctrl = new AbortController()
+    const timer = setTimeout(() => ctrl.abort(), 15000)
     try {
       const res = await fetch(FORM_AJAX, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(data),
+        signal: ctrl.signal,
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok || String(json.success) !== 'true') throw new Error(json.message || 'Send failed')
@@ -58,6 +62,8 @@ function ContactForm() {
       setStatus('sent')
     } catch {
       setStatus('error')
+    } finally {
+      clearTimeout(timer)
     }
   }
 
